@@ -219,8 +219,7 @@
         <div class="imgs" id="imgGrid"></div>
         <div class="uploadrow">
           <label class="btn btn--ghost" style="cursor:pointer">
-            <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-            Subir fotos
+            <span id="fileBtnTxt"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg> Subir fotos</span>
             <input id="fileInput" type="file" accept="image/*" multiple class="hidden" />
           </label>
           <div class="urlin"><input id="urlInput" type="url" placeholder="…o pega una URL de imagen" /><button type="button" class="btn btn--ghost" id="addUrl">Añadir</button></div>
@@ -241,9 +240,9 @@
 
         <div class="section-h">Precio y números</div>
         <div class="grid3">
-          <div class="fld"><label for="f_price">Precio ($)</label><input id="f_price" type="number" min="0" step="1" placeholder="29995" /></div>
-          <div class="fld"><label for="f_msrp">MSRP ($)</label><input id="f_msrp" type="number" min="0" step="1" placeholder="34120" /></div>
-          <div class="fld"><label for="f_mileage">Millaje</label><input id="f_mileage" type="number" min="0" step="1" placeholder="28450" /></div>
+          <div class="fld"><label for="f_price">Precio ($)</label><input id="f_price" type="text" inputmode="numeric" placeholder="29995" /></div>
+          <div class="fld"><label for="f_msrp">MSRP ($)</label><input id="f_msrp" type="text" inputmode="numeric" placeholder="34120" /></div>
+          <div class="fld"><label for="f_mileage">Millaje</label><input id="f_mileage" type="text" inputmode="numeric" placeholder="28450" /></div>
         </div>
 
         <div class="section-h">Mecánica y colores</div>
@@ -462,7 +461,7 @@
 
   $("#fileInput").addEventListener("change",function(e){
     var files=Array.prototype.slice.call(e.target.files||[]); if(!files.length) return;
-    var lbl=e.target.closest("label"); var prev=lbl.innerHTML; lbl.innerHTML='<span class="spin"></span> Subiendo…';
+    var txt=$("#fileBtnTxt"); var prev=txt.innerHTML; txt.innerHTML='<span class="spin"></span> Subiendo…'; // NO tocar el <input>, así no pierde su listener
     var idBase=editingId||genId()||("car-"+Date.now());
     var jobs=files.map(function(f){
       var safe=f.name.replace(/[^a-zA-Z0-9.\-_]/g,"_");
@@ -474,7 +473,7 @@
     });
     Promise.all(jobs).then(function(){ renderImgs(); toast(files.length+" foto(s) subida(s)","ok"); })
       .catch(function(err){ toast("Error al subir: "+esc(err.message||err),"err"); })
-      .finally(function(){ lbl.innerHTML=prev; e.target.value=""; });
+      .finally(function(){ txt.innerHTML=prev; e.target.value=""; });
   });
 
   function renderFeats(){
@@ -517,7 +516,7 @@
   document.querySelectorAll("[data-dclose]").forEach(function(el){ el.addEventListener("click",closeForm); });
   $("#genId").addEventListener("click",function(){ var g=genId(); if(g) $("#f_id").value=g; else toast("Completa año, marca y modelo","err"); });
 
-  function numOrNull(v){ v=String(v).trim(); return v===""?null:Number(v); }
+  function numOrNull(v){ v=String(v).replace(/[^0-9.\-]/g,"").trim(); return v===""?null:Number(v); } // acepta comas/$ (los quita)
   $("#carForm").addEventListener("submit",function(e){
     e.preventDefault();
     var id=($("#f_id").value.trim()||genId());

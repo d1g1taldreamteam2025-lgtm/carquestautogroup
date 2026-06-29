@@ -337,8 +337,7 @@
   function showApp(session){
     hide("#login"); show("#app");
     $("#who").textContent=session.user.email;
-    var live=(location.href.replace(/admin\.html.*$/,"")||"./")+"index.html";
-    $("#viewLive").href=live;
+    $("#viewLive").href=new URL("./",location.href).href; // carpeta actual -> sirve index.html (robusto con cleanUrls)
     loadRows();
   }
   function showLogin(){ hide("#app"); show("#login"); }

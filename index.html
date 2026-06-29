@@ -8,6 +8,7 @@
 <link rel="icon" href="https://carquestautogroup.com/wp-content/uploads/2024/04/cropped-cq-logo-300x892-1-32x32.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://db.ucallnow.fun" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <style>
   :root{
@@ -125,28 +126,26 @@
   .cq-modal{position:fixed;inset:0;z-index:100;display:none}
   .cq-modal.is-open{display:block}
   .cq-modal__bg{position:absolute;inset:0;background:rgba(8,11,20,.66);backdrop-filter:blur(3px)}
-  .cq-modal__panel{position:absolute;inset:0;margin:auto;max-width:1040px;width:calc(100% - 28px);max-height:calc(100% - 40px);
-    top:20px;bottom:20px;background:#fff;border-radius:20px;overflow:auto;box-shadow:var(--shadow-lg);
+  .cq-modal__panel{position:absolute;inset:0;margin:auto;max-width:1040px;width:calc(100% - 28px);
+    height:min(760px,calc(100% - 40px));background:#fff;border-radius:20px;overflow:hidden;box-shadow:var(--shadow-lg);
     animation:cqUp .28s cubic-bezier(.2,.7,.3,1)}
   @keyframes cqUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
   .cq-modal__close{position:fixed;top:30px;right:calc(50% - 510px);z-index:5;width:40px;height:40px;border-radius:50%;
     background:#fff;box-shadow:var(--shadow);color:var(--ink);font-size:20px;display:grid;place-items:center}
   @media(max-width:1080px){.cq-modal__close{right:24px;top:30px}}
   .cq-modal__close:hover{background:var(--brand);color:#fff}
-  .cq-dgrid{display:grid;grid-template-columns:1.15fr 1fr}
-  @media(max-width:860px){.cq-dgrid{grid-template-columns:1fr}}
-  .cq-gal{background:#0b0f1a;align-self:start}  /* no estirar: evita el hueco oscuro bajo las miniaturas */
-  @media(max-width:860px){.cq-gal{align-self:stretch}}
-  .cq-gal__main{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,var(--nav),var(--nav-soft))}
+  .cq-dgrid{display:grid;grid-template-columns:1.15fr 1fr;height:100%;min-height:0}
+  .cq-gal{background:#0b0f1a;display:flex;flex-direction:column;min-height:0}
+  .cq-gal__main{position:relative;flex:1;min-height:260px;background:linear-gradient(135deg,var(--nav),var(--nav-soft))}
   .cq-gal__main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .cq-gal__nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;
     background:rgba(255,255,255,.9);color:var(--ink);display:grid;place-items:center;font-size:18px;box-shadow:var(--shadow)}
   .cq-gal__nav:hover{background:var(--brand);color:#fff}
   .cq-gal__nav.prev{left:12px}.cq-gal__nav.next{right:12px}
-  .cq-gal__thumbs{display:flex;gap:8px;padding:10px;overflow-x:auto}
+  .cq-gal__thumbs{display:flex;gap:8px;padding:10px;overflow-x:auto;flex:none}
   .cq-gal__thumbs img{height:56px;width:80px;object-fit:cover;border-radius:8px;opacity:.55;cursor:pointer;border:2px solid transparent;flex:none}
   .cq-gal__thumbs img.is-active{opacity:1;border-color:var(--brand)}
-  .cq-det{padding:24px}
+  .cq-det{padding:24px;overflow-y:auto;min-height:0}
   .cq-det__badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
   .cq-det h2{margin:0;font-size:24px;font-weight:900;letter-spacing:-.4px}
   .cq-det__trim{color:var(--muted);font-weight:600;margin:2px 0 14px}
@@ -166,6 +165,14 @@
   .cq-det__cta a{padding:14px;border-radius:12px;font-weight:800;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
   .cq-det__cta .full{grid-column:1/-1}
   .cq-meta{margin-top:14px;font-size:12.5px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+  /* En móvil el panel crece según contenido y la galería usa proporción fija (no columna estirada) */
+  @media(max-width:860px){
+    .cq-modal__panel{inset:12px;margin:0;height:auto;max-height:none;overflow:auto}
+    .cq-dgrid{grid-template-columns:1fr;height:auto}
+    .cq-gal{display:block}
+    .cq-gal__main{flex:none;aspect-ratio:4/3;min-height:0}
+    .cq-det{overflow:visible}
+  }
 
   /* ---------- FOOTER STRIP ---------- */
   .cq-foot{background:var(--nav);color:#9aa6bd;padding:22px 0;margin-top:10px}
@@ -582,6 +589,8 @@
     }
     window.addEventListener("load",report); window.addEventListener("resize",report);
     if(window.ResizeObserver){ new ResizeObserver(report).observe(document.body); }
+    report(); // primer aviso inmediato: el iframe se ajusta apenas pinta, sin saltos
+    [50,150,300,600,1000,1600].forEach(function(t){ setTimeout(report,t); }); // ráfaga inicial mientras carga
     setInterval(report,800);
   })();
 })();

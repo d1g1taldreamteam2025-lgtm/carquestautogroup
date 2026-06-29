@@ -75,8 +75,8 @@ No requiere build. Opciones:
 - **Vercel web:** importa el repo de GitHub; framework = *Other*; sin comando de build; output = raíz.
 
 Quedan dos URLs públicas:
-- `https://TU-PROYECTO.vercel.app/`            → widget de inventario
-- `https://TU-PROYECTO.vercel.app/admin.html`  → panel de admin (login)
+- `https://carquestautogroup.vercel.app/`            → widget de inventario
+- `https://carquestautogroup.vercel.app/admin.html`  → panel de admin (login)
 
 ---
 
@@ -87,7 +87,7 @@ y pega esto (cambia la URL por la de tu Vercel). Incluye auto-ajuste de alto, si
 
 ```html
 <iframe id="cqInventory"
-        src="https://TU-PROYECTO.vercel.app/"
+        src="https://carquestautogroup.vercel.app/"
         title="CarQuest Inventory"
         style="width:100%;border:0;display:block;min-height:1400px"
         loading="lazy"></iframe>

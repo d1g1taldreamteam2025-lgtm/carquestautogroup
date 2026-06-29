@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Inventory — CarQuest Auto Group</title>
+<meta name="description" content="Browse CarQuest Auto Group's available inventory. Good credit, challenged credit, no credit — everybody gets approved." />
+<link rel="icon" href="https://carquestautogroup.com/wp-content/uploads/2024/04/cropped-cq-logo-300x892-1-32x32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Mulish:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --brand:#ff4605; --brand-dark:#e23d02; --brand-light:#fff0eb;
+    --nav:#0b0f1a; --nav-soft:#121829; --ink:#0e1320; --muted:#5a6473;
+    --line:#e8ebf1; --bg:#f4f6fb; --card:#ffffff; --good:#1f9d57;
+    --shadow:0 10px 30px rgba(15,19,32,.08); --shadow-lg:0 24px 60px rgba(15,19,32,.18);
+    --r:16px;
+    --font:'Mulish',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,Helvetica,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:var(--font);color:var(--ink);background:var(--bg);-webkit-font-smoothing:antialiased;line-height:1.5}
+  img{display:block;max-width:100%}
+  a{color:inherit}
+  button{font-family:inherit;cursor:pointer;border:0;background:none}
+  .cq-wrap{max-width:1240px;margin:0 auto;padding:0 18px}
+
+  /* ---------- HERO ---------- */
+  .cq-hero{background:radial-gradient(1200px 360px at 80% -40%,rgba(255,70,5,.35),transparent 60%),linear-gradient(180deg,var(--nav),var(--nav-soft));color:#fff;padding:26px 0 22px}
+  .cq-hero__top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .cq-logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .cq-logo img{height:46px;width:auto}
+  .cq-logo__fallback{font-weight:900;letter-spacing:.5px;font-size:22px;color:#fff;display:none}
+  .cq-logo__fallback b{color:var(--brand)}
+  .cq-callbtn{display:inline-flex;align-items:center;gap:9px;background:var(--brand);color:#fff;font-weight:800;
+    padding:11px 18px;border-radius:999px;text-decoration:none;box-shadow:0 8px 22px rgba(255,70,5,.35);transition:.18s}
+  .cq-callbtn:hover{background:var(--brand-dark);transform:translateY(-1px)}
+  .cq-hero__title{margin:18px 0 4px;font-size:clamp(26px,4vw,40px);font-weight:900;line-height:1.08;letter-spacing:-.5px}
+  .cq-hero__title span{color:var(--brand)}
+  .cq-hero__sub{margin:0;color:#b9c2d6;font-weight:500;max-width:640px}
+  .cq-pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+  .cq-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);
+    color:#fff;padding:8px 14px;border-radius:999px;font-weight:700;font-size:13px;transition:.16s}
+  .cq-pill:hover{background:rgba(255,255,255,.16)}
+  .cq-pill.is-active{background:var(--brand);border-color:var(--brand);box-shadow:0 8px 20px rgba(255,70,5,.4)}
+  .cq-pill svg{width:16px;height:16px}
+
+  /* ---------- TOOLBAR ---------- */
+  .cq-toolbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:saturate(1.2) blur(10px);
+    border-bottom:1px solid var(--line);box-shadow:0 6px 18px rgba(15,19,32,.05)}
+  .cq-toolbar__inner{display:flex;gap:10px;align-items:center;padding:12px 0;flex-wrap:wrap}
+  .cq-search{flex:1 1 230px;position:relative;min-width:200px}
+  .cq-search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:18px;height:18px;color:var(--muted)}
+  .cq-search input{width:100%;padding:12px 14px 12px 42px;border:1px solid var(--line);border-radius:12px;font-size:15px;background:#fff;outline:none;transition:.16s}
+  .cq-search input:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-light)}
+  .cq-select{position:relative}
+  .cq-select select{appearance:none;-webkit-appearance:none;padding:12px 38px 12px 14px;border:1px solid var(--line);border-radius:12px;
+    background:#fff;font-size:14px;font-weight:600;color:var(--ink);outline:none;cursor:pointer;min-width:128px;transition:.16s}
+  .cq-select select:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-light)}
+  .cq-select::after{content:"";position:absolute;right:14px;top:50%;width:8px;height:8px;border-right:2px solid var(--muted);
+    border-bottom:2px solid var(--muted);transform:translateY(-70%) rotate(45deg);pointer-events:none}
+  .cq-reset{padding:11px 14px;border:1px solid var(--line);border-radius:12px;font-weight:700;color:var(--muted);background:#fff;transition:.16s;white-space:nowrap}
+  .cq-reset:hover{color:var(--brand);border-color:var(--brand)}
+
+  /* ---------- RESULTS BAR ---------- */
+  .cq-resbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:22px 0 6px}
+  .cq-count{font-weight:800;font-size:18px}
+  .cq-count b{color:var(--brand)}
+  .cq-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .cq-chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;
+    padding:6px 8px 6px 12px;font-size:12.5px;font-weight:700;color:var(--ink)}
+  .cq-chip button{width:18px;height:18px;border-radius:50%;background:var(--bg);color:var(--muted);font-size:13px;line-height:1;display:grid;place-items:center}
+  .cq-chip button:hover{background:var(--brand);color:#fff}
+
+  /* ---------- GRID ---------- */
+  .cq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:22px;margin:14px 0 40px}
+  .cq-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow);
+    display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s;cursor:pointer;opacity:0;transform:translateY(10px);animation:cqIn .5s forwards}
+  @keyframes cqIn{to{opacity:1;transform:none}}
+  .cq-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg)}
+  .cq-card:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+  .cq-media{position:relative;aspect-ratio:16/10;background:linear-gradient(135deg,var(--nav),var(--nav-soft));overflow:hidden}
+  .cq-media__ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;text-align:center;padding:14px}
+  .cq-media__ph svg{width:54px;height:54px;opacity:.5;margin-bottom:8px}
+  .cq-media__ph span{font-weight:800;font-size:15px;opacity:.92}
+  .cq-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s}
+  .cq-media img.is-loaded{opacity:1}
+  .cq-card:hover .cq-media img.is-loaded{transform:scale(1.05);transition:transform .5s,opacity .4s}
+  .cq-badges{position:absolute;top:12px;left:12px;display:flex;gap:6px;flex-wrap:wrap;z-index:2}
+  .cq-badge{background:var(--brand);color:#fff;font-weight:800;font-size:11px;letter-spacing:.3px;padding:5px 10px;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+  .cq-badge--save{background:var(--good)}
+  .cq-fav{position:absolute;top:10px;right:10px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(11,15,26,.55);
+    color:#ffd34d;display:grid;place-items:center;backdrop-filter:blur(4px)}
+  .cq-fav svg{width:18px;height:18px}
+  .cq-body{padding:15px 16px 16px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .cq-titlerow{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+  .cq-name{font-weight:800;font-size:17px;line-height:1.25;letter-spacing:-.2px}
+  .cq-name small{display:block;font-weight:600;color:var(--muted);font-size:13px;margin-top:2px}
+  .cq-price{text-align:right;white-space:nowrap}
+  .cq-price b{font-size:20px;font-weight:900;color:var(--ink)}
+  .cq-price s{display:block;color:var(--muted);font-size:12.5px;font-weight:600}
+  .cq-specs{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;border-top:1px solid var(--line);padding-top:12px;margin-top:auto}
+  .cq-spec{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);font-weight:600;min-width:0}
+  .cq-spec svg{width:16px;height:16px;color:var(--brand);flex:none}
+  .cq-spec span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .cq-actions{display:flex;gap:8px;margin-top:2px}
+  .cq-btn{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 12px;border-radius:11px;font-weight:800;font-size:13.5px;transition:.16s;text-decoration:none}
+  .cq-btn--primary{background:var(--brand);color:#fff}
+  .cq-btn--primary:hover{background:var(--brand-dark)}
+  .cq-btn--ghost{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+  .cq-btn--ghost:hover{border-color:var(--brand);color:var(--brand)}
+
+  /* ---------- SKELETON / EMPTY ---------- */
+  .cq-sk{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  .cq-sk .b{background:linear-gradient(90deg,#eef1f6 25%,#e2e7f0 37%,#eef1f6 63%);background-size:400% 100%;animation:cqsk 1.3s infinite}
+  @keyframes cqsk{0%{background-position:100% 0}100%{background-position:-100% 0}}
+  .cq-sk .m{aspect-ratio:16/10}
+  .cq-sk .l{height:14px;border-radius:6px;margin:14px 16px}
+  .cq-empty{text-align:center;padding:60px 20px;color:var(--muted)}
+  .cq-empty svg{width:60px;height:60px;color:var(--line);margin-bottom:10px}
+  .cq-empty h3{color:var(--ink);margin:.2em 0}
+
+  /* ---------- MODAL ---------- */
+  .cq-modal{position:fixed;inset:0;z-index:100;display:none}
+  .cq-modal.is-open{display:block}
+  .cq-modal__bg{position:absolute;inset:0;background:rgba(8,11,20,.66);backdrop-filter:blur(3px)}
+  .cq-modal__panel{position:absolute;inset:0;margin:auto;max-width:1040px;width:calc(100% - 28px);max-height:calc(100% - 40px);
+    top:20px;bottom:20px;background:#fff;border-radius:20px;overflow:auto;box-shadow:var(--shadow-lg);
+    animation:cqUp .28s cubic-bezier(.2,.7,.3,1)}
+  @keyframes cqUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+  .cq-modal__close{position:fixed;top:30px;right:calc(50% - 510px);z-index:5;width:40px;height:40px;border-radius:50%;
+    background:#fff;box-shadow:var(--shadow);color:var(--ink);font-size:20px;display:grid;place-items:center}
+  @media(max-width:1080px){.cq-modal__close{right:24px;top:30px}}
+  .cq-modal__close:hover{background:var(--brand);color:#fff}
+  .cq-dgrid{display:grid;grid-template-columns:1.15fr 1fr}
+  @media(max-width:860px){.cq-dgrid{grid-template-columns:1fr}}
+  .cq-gal{background:#0b0f1a}
+  .cq-gal__main{position:relative;aspect-ratio:4/3;background:linear-gradient(135deg,var(--nav),var(--nav-soft))}
+  .cq-gal__main img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .cq-gal__nav{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border-radius:50%;
+    background:rgba(255,255,255,.9);color:var(--ink);display:grid;place-items:center;font-size:18px;box-shadow:var(--shadow)}
+  .cq-gal__nav:hover{background:var(--brand);color:#fff}
+  .cq-gal__nav.prev{left:12px}.cq-gal__nav.next{right:12px}
+  .cq-gal__thumbs{display:flex;gap:8px;padding:10px;overflow-x:auto}
+  .cq-gal__thumbs img{height:56px;width:80px;object-fit:cover;border-radius:8px;opacity:.55;cursor:pointer;border:2px solid transparent;flex:none}
+  .cq-gal__thumbs img.is-active{opacity:1;border-color:var(--brand)}
+  .cq-det{padding:24px}
+  .cq-det__badges{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+  .cq-det h2{margin:0;font-size:24px;font-weight:900;letter-spacing:-.4px}
+  .cq-det__trim{color:var(--muted);font-weight:600;margin:2px 0 14px}
+  .cq-det__price{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+  .cq-det__price b{font-size:30px;font-weight:900}
+  .cq-det__price s{color:var(--muted);font-weight:600}
+  .cq-det__price .sv{background:var(--brand-light);color:var(--brand-dark);font-weight:800;font-size:12.5px;padding:4px 10px;border-radius:999px}
+  .cq-detspecs{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-bottom:18px}
+  .cq-detspecs div{background:#fff;padding:10px 12px}
+  .cq-detspecs .k{font-size:11.5px;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);font-weight:700}
+  .cq-detspecs .v{font-weight:700;font-size:14.5px;margin-top:2px}
+  .cq-feat{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .cq-feat span{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:12.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+  .cq-feat span svg{width:14px;height:14px;color:var(--good)}
+  .cq-desc{color:#39424f;margin-bottom:20px}
+  .cq-det__cta{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .cq-det__cta a{padding:14px;border-radius:12px;font-weight:800;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .cq-det__cta .full{grid-column:1/-1}
+  .cq-meta{margin-top:14px;font-size:12.5px;color:var(--muted);display:flex;gap:16px;flex-wrap:wrap}
+
+  /* ---------- FOOTER STRIP ---------- */
+  .cq-foot{background:var(--nav);color:#9aa6bd;padding:22px 0;margin-top:10px}
+  .cq-foot__in{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:13.5px}
+  .cq-foot a{color:#fff;text-decoration:none;font-weight:700}
+  .cq-foot a:hover{color:var(--brand)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+  .cq-card:focus{outline:none}
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+    .cq-card{opacity:1!important;transform:none!important}
+    .cq-card:hover{transform:none!important}
+    .cq-card:hover .cq-media img.is-loaded{transform:none!important}
+  }
+</style>
+</head>
+<body>
+  <!-- HERO -->
+  <header class="cq-hero">
+    <div class="cq-wrap">
+      <div class="cq-hero__top">
+        <a class="cq-logo" id="cqLogo" href="#" aria-label="CarQuest Auto Group">
+          <img id="cqLogoImg" alt="CarQuest Auto Group" />
+          <span class="cq-logo__fallback">CAR<b>QUEST</b></span>
+        </a>
+        <a class="cq-callbtn" id="cqCall" href="#">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6.6 10.8a15.6 15.6 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.58 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1 11.4 11.4 0 0 0 .58 3.6 1 1 0 0 1-.25 1z"/></svg>
+          <span id="cqCallTxt">Call Now</span>
+        </a>
+      </div>
+      <h1 class="cq-hero__title">Good Credit · <span>Challenged Credit</span> · No Credit<br/>Everybody Gets Approved.</h1>
+      <p class="cq-hero__sub">Browse our hand-picked inventory. Every vehicle is inspected, priced to move, and ready to finance — with lenders for every situation.</p>
+      <nav class="cq-pills" id="cqPills" aria-label="Filter by body type"></nav>
+    </div>
+  </header>
+
+  <!-- TOOLBAR -->
+  <div class="cq-toolbar">
+    <div class="cq-wrap">
+      <div class="cq-toolbar__inner">
+        <label class="cq-search">
+          <span class="sr">Search inventory</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="cqSearch" type="search" placeholder="Search make, model, color…" autocomplete="off" />
+        </label>
+        <div class="cq-select"><select id="cqMake" aria-label="Make"></select></div>
+        <div class="cq-select"><select id="cqBody" aria-label="Body type"></select></div>
+        <div class="cq-select"><select id="cqPrice" aria-label="Price range"></select></div>
+        <div class="cq-select"><select id="cqSort" aria-label="Sort by"></select></div>
+        <button class="cq-reset" id="cqReset" type="button">Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <main class="cq-wrap">
+    <div class="cq-resbar">
+      <div class="cq-count" id="cqCount" aria-live="polite">Loading inventory…</div>
+      <div class="cq-chips" id="cqChips"></div>
+    </div>
+    <div class="cq-grid" id="cqGrid"></div>
+  </main>
+
+  <!-- DETAIL MODAL -->
+  <div class="cq-modal" id="cqModal" role="dialog" aria-modal="true" aria-labelledby="cqDetTitle">
+    <div class="cq-modal__bg" data-close></div>
+    <button class="cq-modal__close" data-close aria-label="Close">&times;</button>
+    <div class="cq-modal__panel" id="cqModalPanel"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="cq-foot">
+    <div class="cq-wrap cq-foot__in">
+      <div>© <span id="cqYear"></span> <a id="cqFootName" href="#">CarQuest Auto Group</a> — All rights reserved.</div>
+      <div id="cqFootContact"></div>
+    </div>
+  </footer>
+
+<script src="config.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---- config (inline defaults so the widget also works as a drop-in HTML block) ---- */
+  var DEFAULTS = {
+    supabase:{ url:"https://db.ucallnow.fun", anonKey:"", table:"carquest_inventory", bucket:"carquest" },
+    fallbackJson:"inventory.json",
+    brand:{ name:"CarQuest Auto Group", primary:"#ff4605", primaryDark:"#e23d02", primaryLight:"#fff0eb",
+      nav:"#0b0f1a", navSoft:"#121829", ink:"#0e1320",
+      logo:"https://carquestautogroup.com/wp-content/uploads/2023/09/cq-logo.png" },
+    contact:{ phone:"(714) 583-0908", phoneHref:"tel:+17145830908",
+      email:"customerservice@carquestautogroup.com",
+      address:"12235 Beach Blvd STE 104C, Stanton, CA 90680",
+      site:"https://carquestautogroup.com",
+      applyUrl:"https://carquestautogroup.com/online-credit-application/",
+      contactUrl:"https://carquestautogroup.com/contact-us/" },
+    taxonomy:{ bodyTypes:["Sedan","SUV","Truck","Coupe","Hatchback","Convertible","Van","Minivan","Wagon"] }
+  };
+  function deepMerge(a,b){ a=a||{}; b=b||{}; var o=Object.assign({},a);
+    for(var k in b){ o[k]=(b[k]&&typeof b[k]==="object"&&!Array.isArray(b[k])) ? deepMerge(a[k],b[k]) : b[k]; } return o; }
+  var CFG = deepMerge(DEFAULTS, window.CARQUEST||{});
+
+  /* ---- apply brand colors + contact links ---- */
+  var R=document.documentElement.style;
+  R.setProperty("--brand",CFG.brand.primary); R.setProperty("--brand-dark",CFG.brand.primaryDark);
+  R.setProperty("--brand-light",CFG.brand.primaryLight); R.setProperty("--nav",CFG.brand.nav);
+  R.setProperty("--nav-soft",CFG.brand.navSoft); R.setProperty("--ink",CFG.brand.ink);
+
+  var $=function(s,c){return (c||document).querySelector(s);};
+  var BODY_ICON = {
+    Sedan:'M5 11l2-4h10l2 4M3 11h18v4a1 1 0 0 1-1 1h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H4a1 1 0 0 1-1-1z',
+    SUV:'M4 12l1.5-5h11L20 12M3 12h18v4h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H3z',
+    Truck:'M3 7h10v8H3zM13 10h4l3 3v2h-7zM7 17a1.5 1.5 0 1 0 0 .01M17 17a1.5 1.5 0 1 0 0 .01',
+    Coupe:'M4 12c1-3 3-5 8-5s6 2 8 5M3 12h18v3a1 1 0 0 1-1 1h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H4a1 1 0 0 1-1-1z',
+    Hatchback:'M4 12l2-5h7l5 5M3 12h18v4h-2a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H3z',
+    Convertible:'M4 13c1-2 3-3 8-3s7 1 8 3M3 13h18v3h-1a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H3z',
+    Van:'M3 7h13l4 4v5H3zM7 18a1.5 1.5 0 1 0 0 .01M17 18a1.5 1.5 0 1 0 0 .01',
+    Minivan:'M3 9c3-2 5-2 9-2s6 1 9 4v4H3zM7 17a1.5 1.5 0 1 0 0 .01M17 17a1.5 1.5 0 1 0 0 .01',
+    Wagon:'M3 11l2-4h12l3 4M3 11h18v4h-2a2 2 0 1 1-4 0H9a2 2 0 1 1-4 0H3z'
+  };
+  function carPath(b){ return BODY_ICON[b] || BODY_ICON.Sedan; }
+  var ICON={
+    mileage:'M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM4 18a8 8 0 1 1 16 0M12 12l3-3',
+    fuel:'M5 3h8v18H5zM13 7h3l2 2v8a2 2 0 1 1-4 0V11h-1',
+    gear:'M6 8h8M6 12h8M14 6v12M9 6v3M9 15v3',
+    drive:'M12 3v18M3 12h18M7 7l10 10M17 7L7 17',
+    color:'M12 21a9 9 0 1 1 9-9c0 2-2 3-4 3h-1a2 2 0 0 0-1 3 2 2 0 0 1-2 3z',
+    check:'M5 12l4 4L19 6'
+  };
+  function svg(d,w){ return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="'+(w||2)+'" stroke-linecap="round" stroke-linejoin="round"><path d="'+d+'"/></svg>'; }
+
+  var usd=new Intl.NumberFormat("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0});
+  var num=new Intl.NumberFormat("en-US");
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+  function arr(v){ if(Array.isArray(v))return v; if(typeof v==="string"){ try{var p=JSON.parse(v); return Array.isArray(p)?p:(v?[v]:[]);}catch(e){return v?[v]:[];} } return []; }
+  function placeholderSVG(c){
+    var t=esc((c.year||"")+" "+(c.make||"")+" "+(c.model||"")).trim()||"CarQuest";
+    var s='<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="'+CFG.brand.nav+'"/><stop offset="1" stop-color="'+CFG.brand.navSoft+'"/></linearGradient></defs><rect width="640" height="400" fill="url(#g)"/><g fill="none" stroke="'+CFG.brand.primary+'" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" transform="translate(232,150) scale(7)"><path d="'+carPath(c.body_type)+'"/></g><text x="320" y="350" fill="#fff" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="bold" text-anchor="middle" opacity="0.92">'+t+'</text></svg>';
+    return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(s);
+  }
+
+  /* ---- state ---- */
+  var ALL=[], state={ q:"", make:"", body:"", price:"", sort:"newest" };
+  var PRICE_RANGES=[
+    {label:"Any price",value:""},{label:"Under $20k",value:"0-20000"},{label:"$20k – $30k",value:"20000-30000"},
+    {label:"$30k – $40k",value:"30000-40000"},{label:"$40k – $50k",value:"40000-50000"},{label:"$50k+",value:"50000-9999999"}
+  ];
+  var SORTS=[
+    {label:"Newest arrivals",value:"newest"},{label:"Price: Low to High",value:"price-asc"},
+    {label:"Price: High to Low",value:"price-desc"},{label:"Lowest mileage",value:"miles-asc"},
+    {label:"Year: Newest",value:"year-desc"}
+  ];
+
+  /* ---- header / footer fill ---- */
+  function paintChrome(){
+    document.title="Inventory — "+CFG.brand.name;
+    var li=$("#cqLogoImg"); li.src=CFG.brand.logo; li.alt=CFG.brand.name;
+    li.onerror=function(){ this.style.display="none"; $(".cq-logo__fallback").style.display="block"; };
+    $("#cqLogo").href=CFG.contact.site;
+    $("#cqCall").href=CFG.contact.phoneHref; $("#cqCallTxt").textContent=CFG.contact.phone;
+    $("#cqYear").textContent=new Date().getFullYear();
+    $("#cqFootName").textContent=CFG.brand.name; $("#cqFootName").href=CFG.contact.site;
+    $("#cqFootContact").innerHTML='<a href="'+esc(CFG.contact.phoneHref)+'">'+esc(CFG.contact.phone)+'</a> &nbsp;·&nbsp; '+
+      '<a href="mailto:'+esc(CFG.contact.email)+'">'+esc(CFG.contact.email)+'</a>';
+  }
+
+  /* ---- controls ---- */
+  function fillSelect(el,opts,cur){ el.innerHTML=opts.map(function(o){
+    return '<option value="'+esc(o.value)+'"'+(o.value===cur?" selected":"")+'>'+esc(o.label)+'</option>'; }).join(""); }
+  function buildControls(){
+    var makes=[{label:"All makes",value:""}].concat(
+      Array.from(new Set(ALL.map(function(c){return c.make;}).filter(Boolean))).sort().map(function(m){return {label:m,value:m};}));
+    var bodies=[{label:"All types",value:""}].concat((CFG.taxonomy.bodyTypes||[]).map(function(b){return {label:b,value:b};}));
+    fillSelect($("#cqMake"),makes,state.make);
+    fillSelect($("#cqBody"),bodies,state.body);
+    fillSelect($("#cqPrice"),PRICE_RANGES,state.price);
+    fillSelect($("#cqSort"),SORTS,state.sort);
+    // body pills
+    var counts={}; ALL.forEach(function(c){ counts[c.body_type]=(counts[c.body_type]||0)+1; });
+    var pills=(CFG.taxonomy.bodyTypes||[]).filter(function(b){return counts[b];});
+    $("#cqPills").innerHTML=pills.map(function(b){
+      return '<button class="cq-pill" data-body="'+esc(b)+'">'+svg(carPath(b))+esc(b)+' <span style="opacity:.65">'+counts[b]+'</span></button>';
+    }).join("");
+    syncPills();
+  }
+  function syncPills(){ Array.prototype.forEach.call(document.querySelectorAll(".cq-pill"),function(p){
+    p.classList.toggle("is-active",p.getAttribute("data-body")===state.body); }); }
+
+  /* ---- filtering ---- */
+  function filtered(){
+    var q=state.q.trim().toLowerCase();
+    var out=ALL.filter(function(c){
+      if(state.make && c.make!==state.make) return false;
+      if(state.body && c.body_type!==state.body) return false;
+      if(state.price){ var pr=state.price.split("-"); var p=+c.price||0; if(p<+pr[0]||p>+pr[1]) return false; }
+      if(q){ var hay=[c.year,c.make,c.model,c.trim,c.body_type,c.exterior_color,c.stock].join(" ").toLowerCase(); if(hay.indexOf(q)<0) return false; }
+      return true;
+    });
+    out.sort(function(a,b){
+      switch(state.sort){
+        case "price-asc": return (a.price||0)-(b.price||0);
+        case "price-desc": return (b.price||0)-(a.price||0);
+        case "miles-asc": return (a.mileage||1e12)-(b.mileage||1e12);
+        case "year-desc": return (b.year||0)-(a.year||0);
+        default: // newest: featured first, then created_at desc
+          if(!!b.featured!==!!a.featured) return b.featured?1:-1;
+          return (b._ts||0)-(a._ts||0);
+      }
+    });
+    return out;
+  }
+
+  /* ---- render ---- */
+  function specRow(d,txt){ return '<div class="cq-spec">'+svg(d)+'<span>'+esc(txt)+'</span></div>'; }
+  function card(c,i){
+    var save=(c.msrp&&c.price&&c.msrp>c.price)?(c.msrp-c.price):0;
+    var badges='';
+    if(c.badge) badges+='<span class="cq-badge">'+esc(c.badge)+'</span>';
+    if(save) badges+='<span class="cq-badge cq-badge--save">Save '+usd.format(save)+'</span>';
+    var ph=placeholderSVG(c);
+    var img=c.cover_image ? '<img alt="'+esc(c.year+" "+c.make+" "+c.model)+'" loading="lazy" src="'+esc(c.cover_image)+'" onload="this.classList.add(\'is-loaded\')" onerror="this.remove()">' : '';
+    return ''+
+    '<article class="cq-card" tabindex="0" role="button" data-id="'+esc(c.id)+'" aria-label="'+esc(c.year+" "+c.make+" "+c.model)+', '+usd.format(c.price||0)+'" style="animation-delay:'+Math.min(i*40,400)+'ms">'+
+      '<div class="cq-media">'+
+        '<div class="cq-media__ph">'+svg(carPath(c.body_type),1.6)+'<span>'+esc((c.year||"")+" "+(c.make||"")+" "+(c.model||""))+'</span></div>'+
+        img+
+        '<div class="cq-badges">'+badges+'</div>'+
+        (c.featured?'<div class="cq-fav" title="Featured"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 6 6 .9-4.5 4.4 1 6.2-5.5-3-5.5 3 1-6.2L3 8.9 9 8z"/></svg></div>':'')+
+      '</div>'+
+      '<div class="cq-body">'+
+        '<div class="cq-titlerow">'+
+          '<div class="cq-name">'+esc(c.year+" "+c.make+" "+c.model)+'<small>'+esc(c.trim||c.body_type||"")+'</small></div>'+
+          '<div class="cq-price"><b>'+usd.format(c.price||0)+'</b>'+(save?'<s>'+usd.format(c.msrp)+'</s>':'')+'</div>'+
+        '</div>'+
+        '<div class="cq-specs">'+
+          specRow(ICON.mileage,(c.mileage!=null?num.format(c.mileage)+" mi":"—"))+
+          specRow(ICON.gear,c.transmission||"—")+
+          specRow(ICON.drive,c.drivetrain||c.fuel||"—")+
+          specRow(ICON.color,c.exterior_color||c.fuel||"—")+
+        '</div>'+
+        '<div class="cq-actions">'+
+          '<a class="cq-btn cq-btn--ghost" data-id="'+esc(c.id)+'" data-view href="#">View details</a>'+
+          '<a class="cq-btn cq-btn--primary" href="'+esc(CFG.contact.applyUrl)+'" target="_blank" rel="noopener">Get approved</a>'+
+        '</div>'+
+      '</div>'+
+    '</article>';
+  }
+
+  function render(){
+    var list=filtered();
+    $("#cqCount").innerHTML='<b>'+list.length+'</b> '+(list.length===1?"vehicle":"vehicles")+' available';
+    renderChips();
+    var g=$("#cqGrid");
+    if(!list.length){
+      g.innerHTML='<div class="cq-empty" style="grid-column:1/-1">'+
+        svg("M3 3l18 18M21 3 3 21",1.4)+'<h3>No matches found</h3><p>Try clearing a filter or searching a different make.</p></div>';
+      return;
+    }
+    g.innerHTML=list.map(card).join("");
+  }
+  function renderChips(){
+    var chips=[];
+    if(state.q) chips.push(["q","“"+state.q+"”"]);
+    if(state.make) chips.push(["make",state.make]);
+    if(state.body) chips.push(["body",state.body]);
+    if(state.price){ var r=PRICE_RANGES.filter(function(x){return x.value===state.price;})[0]; if(r) chips.push(["price",r.label]); }
+    $("#cqChips").innerHTML=chips.map(function(c){
+      return '<span class="cq-chip">'+esc(c[1])+'<button data-clear="'+c[0]+'" aria-label="Remove filter">&times;</button></span>'; }).join("");
+  }
+
+  /* ---- detail modal ---- */
+  var modal=$("#cqModal"), gIndex=0, gImgs=[], lastFocus=null;
+  function detailSpecs(c){
+    var rows=[
+      ["Year",c.year],["Make",c.make],["Model",c.model],["Trim",c.trim],["Body",c.body_type],
+      ["Mileage",c.mileage!=null?num.format(c.mileage)+" mi":null],["Fuel",c.fuel],["Transmission",c.transmission],
+      ["Drivetrain",c.drivetrain],["Exterior",c.exterior_color],["Interior",c.interior_color],["Stock #",c.stock]
+    ].filter(function(r){return r[1]!=null && r[1]!=="";});
+    return rows.map(function(r){return '<div><div class="k">'+esc(r[0])+'</div><div class="v">'+esc(r[1])+'</div></div>';}).join("");
+  }
+  function openDetail(id){
+    var c=ALL.filter(function(x){return x.id===id;})[0]; if(!c) return;
+    lastFocus=document.activeElement;
+    gImgs=[].concat(c.cover_image?[c.cover_image]:[],arr(c.gallery)).filter(Boolean);
+    gImgs=gImgs.filter(function(v,i){return gImgs.indexOf(v)===i;}); // dedupe
+    if(!gImgs.length) gImgs=[placeholderSVG(c)];
+    gIndex=0;
+    var save=(c.msrp&&c.price&&c.msrp>c.price)?(c.msrp-c.price):0;
+    var feats=arr(c.features);
+    var sms="sms:"+CFG.contact.phoneHref.replace(/[^0-9+]/g,"")+"?&body="+encodeURIComponent("I'm interested in the "+c.year+" "+c.make+" "+c.model+" (Stock "+(c.stock||c.id)+").");
+    $("#cqModalPanel").innerHTML=''+
+      '<div class="cq-dgrid">'+
+        '<div class="cq-gal">'+
+          '<div class="cq-gal__main" id="cqGalMain">'+
+            '<img id="cqGalImg" alt="'+esc(c.year+" "+c.make+" "+c.model)+'" src="'+esc(gImgs[0])+'" onerror="this.src=\''+placeholderSVG(c)+'\'">'+
+            (gImgs.length>1?'<button class="cq-gal__nav prev" data-gal="-1" aria-label="Previous photo">&#8249;</button><button class="cq-gal__nav next" data-gal="1" aria-label="Next photo">&#8250;</button>':'')+
+          '</div>'+
+          (gImgs.length>1?'<div class="cq-gal__thumbs" id="cqGalThumbs">'+gImgs.map(function(u,i){return '<img src="'+esc(u)+'" data-thumb="'+i+'" class="'+(i===0?"is-active":"")+'" onerror="this.style.display=\'none\'">';}).join("")+'</div>':'')+
+        '</div>'+
+        '<div class="cq-det">'+
+          '<div class="cq-det__badges">'+(c.badge?'<span class="cq-badge">'+esc(c.badge)+'</span>':'')+(c.featured?'<span class="cq-badge" style="background:#1f2a44">★ Featured</span>':'')+(save?'<span class="cq-badge cq-badge--save">Save '+usd.format(save)+'</span>':'')+'</div>'+
+          '<h2 id="cqDetTitle">'+esc(c.year+" "+c.make+" "+c.model)+'</h2>'+
+          '<div class="cq-det__trim">'+esc(c.trim||"")+(c.trim&&c.body_type?" · ":"")+esc(c.body_type||"")+'</div>'+
+          '<div class="cq-det__price"><b>'+usd.format(c.price||0)+'</b>'+(save?'<s>'+usd.format(c.msrp)+'</s><span class="sv">'+usd.format(save)+' below MSRP</span>':'')+'</div>'+
+          '<div class="cq-detspecs">'+detailSpecs(c)+'</div>'+
+          (feats.length?'<div class="cq-feat">'+feats.map(function(f){return '<span>'+svg(ICON.check)+esc(f)+'</span>';}).join("")+'</div>':'')+
+          (c.description?'<p class="cq-desc">'+esc(c.description)+'</p>':'')+
+          '<div class="cq-det__cta">'+
+            '<a class="full" style="background:var(--brand);color:#fff" href="'+esc(CFG.contact.applyUrl)+'" target="_blank" rel="noopener">'+svg(ICON.check)+' Get pre-approved for this vehicle</a>'+
+            '<a style="background:var(--bg);border:1px solid var(--line)" href="'+esc(CFG.contact.phoneHref)+'">Call '+esc(CFG.contact.phone)+'</a>'+
+            '<a style="background:var(--bg);border:1px solid var(--line)" href="'+esc(sms)+'">Text about this car</a>'+
+          '</div>'+
+          '<div class="cq-meta">'+(c.stock?'<span>Stock #'+esc(c.stock)+'</span>':'')+(c.vin?'<span>VIN '+esc(c.vin)+'</span>':'')+'</div>'+
+        '</div>'+
+      '</div>';
+    modal.classList.add("is-open"); document.body.style.overflow="hidden";
+    $(".cq-modal__close").focus();
+  }
+  function setGal(i){ gIndex=(i+gImgs.length)%gImgs.length; $("#cqGalImg").src=gImgs[gIndex];
+    Array.prototype.forEach.call(document.querySelectorAll("[data-thumb]"),function(t){ t.classList.toggle("is-active",+t.getAttribute("data-thumb")===gIndex); }); }
+  function closeModal(){ modal.classList.remove("is-open"); document.body.style.overflow=""; if(lastFocus)lastFocus.focus(); }
+
+  /* ---- events ---- */
+  function on(el,ev,fn){ el.addEventListener(ev,fn); }
+  on($("#cqSearch"),"input",function(e){ state.q=e.target.value; render(); });
+  on($("#cqMake"),"change",function(e){ state.make=e.target.value; render(); });
+  on($("#cqBody"),"change",function(e){ state.body=e.target.value; syncPills(); render(); });
+  on($("#cqPrice"),"change",function(e){ state.price=e.target.value; render(); });
+  on($("#cqSort"),"change",function(e){ state.sort=e.target.value; render(); });
+  on($("#cqReset"),"click",function(){ state={q:"",make:"",body:"",price:"",sort:"newest"};
+    $("#cqSearch").value=""; $("#cqMake").value=""; $("#cqBody").value=""; $("#cqPrice").value=""; $("#cqSort").value="newest";
+    syncPills(); render(); });
+  on($("#cqPills"),"click",function(e){ var p=e.target.closest(".cq-pill"); if(!p)return;
+    var b=p.getAttribute("data-body"); state.body=(state.body===b)?"":b; $("#cqBody").value=state.body; syncPills(); render(); });
+  on($("#cqChips"),"click",function(e){ var b=e.target.closest("[data-clear]"); if(!b)return;
+    var k=b.getAttribute("data-clear"); if(k==="q"){state.q="";$("#cqSearch").value="";}
+    else{ state[k]=""; var sel={make:"#cqMake",body:"#cqBody",price:"#cqPrice"}[k]; if(sel)$(sel).value=""; }
+    syncPills(); render(); });
+  on($("#cqGrid"),"click",function(e){
+    var v=e.target.closest("[data-view]"); if(v){ e.preventDefault(); openDetail(v.getAttribute("data-id")); return; }
+    if(e.target.closest("a")) return; // let real links (Get approved) work
+    var card=e.target.closest(".cq-card"); if(card) openDetail(card.getAttribute("data-id")); });
+  on($("#cqGrid"),"keydown",function(e){ if(e.key!=="Enter"&&e.key!==" ")return; var card=e.target.closest(".cq-card");
+    if(card){ e.preventDefault(); openDetail(card.getAttribute("data-id")); } });
+  on($("#cqModalPanel"),"click",function(e){ var g=e.target.closest("[data-gal]"); if(g){ setGal(gIndex+ +g.getAttribute("data-gal")); return; }
+    var t=e.target.closest("[data-thumb]"); if(t) setGal(+t.getAttribute("data-thumb")); });
+  Array.prototype.forEach.call(document.querySelectorAll("[data-close]"),function(el){ on(el,"click",closeModal); });
+  function trapFocus(e,root){
+    var nodes=root.querySelectorAll('a[href],button:not([disabled]),input,select,textarea,[tabindex]:not([tabindex="-1"])');
+    var f=Array.prototype.filter.call(nodes,function(el){return el.offsetParent!==null;});
+    if(!f.length) return; var first=f[0], last=f[f.length-1];
+    if(e.shiftKey && document.activeElement===first){ e.preventDefault(); last.focus(); }
+    else if(!e.shiftKey && document.activeElement===last){ e.preventDefault(); first.focus(); }
+  }
+  on(document,"keydown",function(e){ if(!modal.classList.contains("is-open"))return;
+    if(e.key==="Escape") closeModal();
+    else if(e.key==="ArrowRight"&&gImgs.length>1) setGal(gIndex+1);
+    else if(e.key==="ArrowLeft"&&gImgs.length>1) setGal(gIndex-1);
+    else if(e.key==="Tab") trapFocus(e,modal); });
+
+  /* ---- data loading ---- */
+  function normalize(c,i){
+    c.gallery=arr(c.gallery); c.features=arr(c.features);
+    c.price=c.price!=null?+c.price:null; c.msrp=c.msrp!=null?+c.msrp:null;
+    c.year=c.year!=null?+c.year:null; c.mileage=c.mileage!=null?+c.mileage:null;
+    c._ts=c.created_at?Date.parse(c.created_at):(1e12-i); // stable order for JSON
+    if(!c.id) c.id=[c.year,c.make,c.model,c.trim,i].filter(Boolean).join("-").toLowerCase().replace(/[^a-z0-9]+/g,"-");
+    return c;
+  }
+  function showSkeletons(){ $("#cqGrid").innerHTML=Array.from({length:6}).map(function(){
+    return '<div class="cq-sk"><div class="b m"></div><div class="b l" style="width:60%"></div><div class="b l" style="width:40%"></div><div class="b l" style="width:80%;margin-bottom:18px"></div></div>'; }).join(""); }
+
+  function loadJSON(){
+    return fetch(CFG.fallbackJson,{cache:"no-store"}).then(function(r){ if(!r.ok)throw new Error("json "+r.status); return r.json(); });
+  }
+  function loadSupabase(){
+    var sb=CFG.supabase, base=sb.url.replace(/\/+$/,"");
+    var url=base+"/rest/v1/"+sb.table+"?select=*&status=eq.available&order=created_at.desc";
+    return fetch(url,{headers:{apikey:sb.anonKey,Authorization:"Bearer "+sb.anonKey}})
+      .then(function(r){ if(!r.ok)throw new Error("supabase "+r.status); return r.json(); });
+  }
+  function start(data,src){
+    ALL=(data||[]).map(normalize);
+    console.info("[CarQuest] inventory loaded from "+src+" — "+ALL.length+" vehicles");
+    buildControls(); render();
+  }
+  function boot(){
+    paintChrome(); buildControls(); showSkeletons();
+    var hasKey=CFG.supabase && CFG.supabase.anonKey && CFG.supabase.anonKey.length>20;
+    var p = hasKey
+      ? loadSupabase().then(function(d){ if(d&&d.length) return start(d,"Supabase"); return loadJSON().then(function(j){start(j,"inventory.json (Supabase empty)");}); })
+      : loadJSON().then(function(d){ start(d,"inventory.json"); });
+    p.catch(function(err){
+      console.warn("[CarQuest] primary load failed, trying JSON fallback:",err);
+      loadJSON().then(function(d){ start(d,"inventory.json (fallback)"); })
+        .catch(function(e2){
+          console.error("[CarQuest] no inventory source available:",e2);
+          $("#cqGrid").innerHTML='<div class="cq-empty" style="grid-column:1/-1">'+svg("M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z",1.4)+'<h3>Inventory is loading</h3><p>Please call us at '+esc(CFG.contact.phone)+' for current availability.</p></div>';
+          $("#cqCount").textContent="";
+        });
+    });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot); else boot();
+
+  /* ---- iframe auto-resize: report height to parent (WordPress) ---- */
+  (function(){
+    if(window.parent===window) return;
+    var last=0;
+    function report(){
+      var h=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
+      if(Math.abs(h-last)>4){ last=h; try{ window.parent.postMessage({cqInventoryHeight:h},"*"); }catch(e){} }
+    }
+    window.addEventListener("load",report); window.addEventListener("resize",report);
+    if(window.ResizeObserver){ new ResizeObserver(report).observe(document.body); }
+    setInterval(report,800);
+  })();
+})();
+</script>
+</body>
+</html>

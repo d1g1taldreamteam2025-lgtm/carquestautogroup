@@ -13,7 +13,7 @@
 window.CARQUEST = {
   supabase: {
     url:     "https://db.ucallnow.fun",
-    anonKey: "",                       // <-- PEGAR ANON KEY AQUÍ
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24iLCJleHAiOjE5ODM4MTI5OTZ9.CRXP1A7WOeoJeXxjNni43kdQwgnWNReilDMblyTnc4",  // ANON KEY (role:anon, solo-lectura por RLS)
     table:   "carquest_inventory",
     bucket:  "carquest"                // bucket de Supabase Storage para fotos
   },

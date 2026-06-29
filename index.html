@@ -182,7 +182,10 @@
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
   .cq-card:focus{outline:none}
   html.cq-embedded .cq-foot{display:none!important}        /* footer redundante: oculto al estar embebido */
-  html.cq-embedded .cq-hero{padding-top:18px}
+  /* Embebido: hero más compacto → el buscador y los autos suben, la carga se ve limpia (no salta el footer de WP) */
+  html.cq-embedded .cq-hero{padding:14px 0 12px}
+  html.cq-embedded .cq-hero__title{margin-top:10px;font-size:clamp(22px,3vw,30px)}
+  html.cq-embedded .cq-hero__sub{font-size:13.5px}
   @media (prefers-reduced-motion: reduce){
     *{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
     .cq-card{opacity:1!important;transform:none!important}

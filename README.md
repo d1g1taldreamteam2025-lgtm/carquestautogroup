@@ -89,7 +89,7 @@ y pega esto (cambia la URL por la de tu Vercel). Incluye auto-ajuste de alto, si
 <iframe id="cqInventory"
         src="https://carquestautogroup.vercel.app/"
         title="CarQuest Inventory"
-        style="width:100%;border:0;display:block;min-height:360px"></iframe>
+        style="width:100%;border:0;display:block;min-height:800px"></iframe>
 <script>
   window.addEventListener("message", function (e) {
     if (e.data && e.data.cqInventoryHeight) {
